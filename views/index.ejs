@@ -1,12 +1,12 @@
 <% include header.ejs %>
-<form method="post" action="chat">
+<form method="get" action="chat">
   <input type="submit" value="入室">
   <input type="hidden" name="_csrf" value="<%= csrftoken %>">
-  <input type="hidden" name="roomNumber" value="1">
+  <input type="hidden" name="room" value="1">
 </form>
-<form method="post" action="chat">
+<form method="get" action="chat">
   <input type="submit" value="入室">
   <input type="hidden" name="_csrf" value="<%= csrftoken %>">
-  <input type="hidden" name="roomNumber" value="2">
+  <input type="hidden" name="room" value="2">
 </form>
 <% include footer.ejs %>

@@ -12,18 +12,26 @@ var expressSession = require('express-session');
 var csrf           = require('csurf');
 var helmet         = require('helmet');
 
-// ソケット通信の設定 ====================================
+// ソケット通信の設定 =====================================================================================
 io.on( 'connection', function( socket ) {
 
-    // クライアントからサーバーへ メッセージ送信ハンドラ（自分を含む全員宛に送る）
-    socket.on( 'sendMessageToServer', function( data ) {
-      console.log(data);
-      // サーバーからクライアントへ メッセージを送り返し
-      io.sockets.emit( 'sendMessageToClient', { value : data.value } );
-    });
+  socket.on('init', function(req) {
+    io.to(req.room).emit('message', req.name + " さんが入室");
+    socket.join(req.room);
+  });
+
+  socket.on( 'sendMessageToServer', function( data ) {
+    console.log(data);
+    // サーバーからクライアントへ メッセージを送り返し
+    io.to(data.room).emit( 'sendMessageToClient', { value : data.value, name : data.name } );
+  });
+
+  socket.on('disconnect', function () {
+    io.emit('user disconnected');
+  });
 });
 
-// コンフィグ =====================
+// コンフィグ ==============================================================================================
 
 // viewエンジンはejs
 app.set('views', __dirname + '/views');
@@ -47,11 +55,9 @@ app.use(function(req, res, next) {
   next();
 });
 
-// Routes ============================
-// application -------------------------------------------------------------
+// Routes ===================================================================================================
 app.get('/', chat.index);
-app.post('/chat', chat.room);
-
+app.get('/chat', chat.room);
 
 // ポート3000にサーバー開拓
 server.listen(3000);
