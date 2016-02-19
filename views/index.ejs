@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/javascripts/socket-chat.js"></script>
+    <script src="/javascripts/sanitize.js"></script>
+</head>
+<body>
+  <noscript>
+    <p>このページではJavaScriptを使用しています。</p>
+  </noscript>
+  <form onsubmit="return false;" autocomplete="off">
+    <div>
+      <input type="text" id="messageForm">
+      <input type="submit" id="sendMessageBtn" value="送信">
+      <input type="hidden" name="_csrf" value="<%= csrftoken %>">
+    </div>
+  </form>
+  <div id="messageView"></div>
+</body>
+</html>
